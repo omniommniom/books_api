@@ -56,10 +56,23 @@ class ChooseQueryView(View):
         ctx = {'form': form}
         return render(request, 'main.html', ctx)
 
-
-class BookListView(generics.ListCreateAPIView):
-    queryset = Book.objects.all()
+class BookListView(generics.ListAPIView):
     serializer_class = BookSerializer
+
+    def get_queryset(self):
+        queryset = Book.objects.all()
+        published_date = self.request.query_params.get('published_date')
+
+        author = self.request.query_params.get('author')
+        if published_date is not None:
+            queryset = queryset.filter(published_date=published_date)
+        if author is not None:
+            queryset = queryset.filter(authors__contains=author)
+        return queryset
+
+# class BookListView(generics.ListCreateAPIView):
+#     queryset = Book.objects.all()
+#     serializer_class = BookSerializer
 
 
 class BookView(generics.RetrieveUpdateDestroyAPIView):
