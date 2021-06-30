@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from website.views import ChooseQueryView
+from website.views import ChooseQueryView, BookListView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('main/', ChooseQueryView.as_view(), name='choose-query'),
+    path('books/', BookListView.as_view()),
+    # path('book/<int:pk>/', CinemaView.as_view()),
 ]

@@ -1,9 +1,12 @@
 from django.shortcuts import render
 from django.views import View
+from rest_framework import generics
+
 import requests
 
-from .forms import ChooseQuery
-from .models import Book
+from website.forms import ChooseQuery
+from website.models import Book
+from website.serializers import BookSerializer
 
 
 class ChooseQueryView(View):
@@ -43,8 +46,8 @@ class ChooseQueryView(View):
                         book_db.categories=categories
                         book_db.categories=categories
                         book_db.thumbnail=thumbnail
-                            # average_ratings=averageRating,
-                            # ratings_count=ratingsCount,
+                        book_db.average_ratings=averageRating,
+                        book_db.ratings_count=ratingsCount,
                         book_db.save()
                 ctx = {'books': books}
                 return render(request, 'books.html', ctx)
@@ -53,31 +56,12 @@ class ChooseQueryView(View):
         ctx = {'form': form}
         return render(request, 'main.html', ctx)
 
-#
-# class AddStudentView(View):
-#     def get(self, request, *args, **kwargs):
-#         form = AddStudentForm()
-#         context = {
-#             'form': form,
-#         }
-#         return render(request, 'exercises_app/add_student.html', context)
-#
-#     def post(self, request, *args, **kwargs):
-#         form = AddStudentForm(request.POST)
-#         if form.is_valid():
-#             #zapisać do bazy
-#             first_name = form.cleaned_data['name']
-#             last_name = form.cleaned_data['surname']
-#             school_class = form.cleaned_data['class_name']
-#             year_of_birth = form.cleaned_data['year_of_birth']
-#
-#             student = Student.objects.create(
-#                 first_name=first_name,
-#                 last_name=last_name,
-#                 school_class=school_class,
-#                 year_of_birth=year_of_birth,
-#             )
-#             return redirect(f'/student/{student.pk}/')
-#         else:
-#             context = {'form': form}
-#             return render(request, 'exercises_app/add_student.html', context)
+
+class BookListView(generics.ListCreateAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+
+
+class BookView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
