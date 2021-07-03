@@ -12,3 +12,11 @@ class Book(models.Model):
     ratings_count = models.IntegerField(default=0)
     thumbnail = models.CharField(max_length=255)
 
+# class Category(models.Model):
+#     name = models.CharField(max_length=155)
+#
+#
+# class Author(models.Model):
+#     first_name = models.CharField(max_length=155)
+#     last_name = models.CharField(max_length=155)
+#
