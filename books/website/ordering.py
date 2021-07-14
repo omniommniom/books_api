@@ -1,5 +1,5 @@
 from rest_framework.filters import OrderingFilter
-from website.models import Book
+from website.models import Book, Author, Category
 
 class MyCustomOrdering(OrderingFilter):
     queryset = Book.objects.all()
